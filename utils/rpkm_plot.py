@@ -1,4 +1,7 @@
 #!/usr/bin/env python 
+"""
+usage: python rpkm_plot.py rpkm_file.gff rpkm_freq.pdf 
+"""
 
 import sys 
 import numpy
@@ -12,7 +15,8 @@ try:
     rquant_file = sys.argv[1]
     fout_name = sys.argv[2]
 except:
-    exit("error")
+    print __doc__
+    exit("error - provide input arguments -")
 
 rpkm = GFFParser.Parse(rquant_file)
 
