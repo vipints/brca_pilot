@@ -29,23 +29,24 @@ def gene_id_name_map(gtf_file):
 def get_rdiff_p_value(rdiff_res):
     """
     parse the rdiff outfile 
-    """
-    rfh = open(rdiff_res, "rU") 
 
+    @args rdiff_res: rdiff result file genes with p-values  
+    @type rdiff_res: str 
+    """
+
+    rfh = open(rdiff_res, "rU") 
     genes_p_val = defaultdict(list) 
-    
     for rec in rfh: 
         rec = rec.strip("\n\r").split("\t")
-
-        if rec[0] == "gene":
+        if rec[0] == "gene": ## remove header 
             continue 
-
-        if float(rec[1]) < 1.0:
+        if float(rec[1]) < 1.0: ## consider p-value less than 1.0 to calculate FDR 
             genes_p_val[rec[0]].append(float(rec[1])) 
-
     rfh.close() 
-    print len(genes_p_val) 
+    print("considering %d genes for FDR calculation" % len(genes_p_val))
 
+    ## FIXME merge genome annotation to fix this problem
+    """
     genes_corr_p_val = defaultdict() 
     for gid, p_val in genes_p_val.items():
         if len(p_val) > 1: 
@@ -54,11 +55,11 @@ def get_rdiff_p_value(rdiff_res):
             continue 
         genes_corr_p_val[gid] = p_val[0]
     print len(genes_corr_p_val) 
+    """
 
     p_val_to_genes = defaultdict(list) 
-    for gid, val in genes_corr_p_val.items():
+    for gid, val in genes_p_val.items():
         p_val_to_genes[val].append(gid) 
-    print len(p_val_to_genes) 
 
     PVAL = SP.zeros_like(p_val_to_genes.keys())
     for idx, pval in enumerate(p_val_to_genes.keys()):
