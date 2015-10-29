@@ -2,9 +2,13 @@
 
 - helper functions for estimating False Disocvery Rates from Pvalues 
 
-"""
-import scipy as SP
+usage: 
+    from utils import calculate_fdr 
 
+    qval = calculate_fdr.estimate_q_values(pval) 
+"""
+
+import scipy as SP
 from collections import defaultdict 
 
 from utils import GFFParser
@@ -74,25 +78,25 @@ def q_value_to_gene(q_val, p_val, pval_genes, gene_id_name_map):
     
     """
     candidates = dict(RAD51=0,
-    PALB2=0,
-    FANCD2=0,
-    BRCA1=0,
-    SHFM1=0,
-    FANCG=0,
-    CDK2=0,
-    ATM=0,
-    RAD51C=0,
-    XRCC3=0,
-    DMC1=0,
-    TP53=0,
-    FANCI=0,
-    MRE11A=0,
-    RAD50=0,
-    HMG20B=0,
-    MLH1=0,
-    C11orf30=0,
-    RPA1=0,
-    H2AFX=0)
+                PALB2=0,
+                FANCD2=0,
+                BRCA1=0,
+                SHFM1=0,
+                FANCG=0,
+                CDK2=0,
+                ATM=0,
+                RAD51C=0,
+                XRCC3=0,
+                DMC1=0,
+                TP53=0,
+                FANCI=0,
+                MRE11A=0,
+                RAD50=0,
+                HMG20B=0,
+                MLH1=0,
+                C11orf30=0,
+                RPA1=0,
+                H2AFX=0)
 
     for idx, qv in enumerate(q_val):
         corrsp_p_val = p_val[idx] 
@@ -146,8 +150,10 @@ def estimate_q_values(PV,m=None,pi=1):
 
 
 if __name__ == '__main__':
-    a=SP.rand(5)
-    print "p-value ", a 
-    c=estimate_q_values(a)
-    print "q-value ", c 
-    
+
+    id2name, name2id = gene_id_name_map("gencode.v14.gtf")
+    pval, pval2genes = get_rdiff_p_value("dataset_59_vs_60_rdiff.tab")
+
+    qval = estimate_q_values(pval) 
+    q_value_to_gene(qval, pval, pval2genes, id2name)
+
