@@ -49,18 +49,6 @@ def get_rdiff_p_value(rdiff_res):
     rfh.close() 
     print("considering %d genes for FDR calculation" % len(genes_p_val))
 
-    ## FIXME merge genome annotation to fix this problem
-    """
-    genes_corr_p_val = defaultdict() 
-    for gid, p_val in genes_p_val.items():
-        if len(p_val) > 1: 
-            p_val.sort() 
-            genes_corr_p_val[gid] = p_val[-1] 
-            continue 
-        genes_corr_p_val[gid] = p_val[0]
-    print len(genes_corr_p_val) 
-    """
-
     p_val_to_genes = defaultdict(list) 
     for gid, val in genes_p_val.items():
         p_val_to_genes[val].append(gid) 
